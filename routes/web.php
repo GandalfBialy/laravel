@@ -7,6 +7,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\PostsController;
 
+use Illuminate\Support\Facades\Auth;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -40,33 +42,41 @@ Route::get('/', [HomeController::class, 'home'])
 Route::get('/contact', [HomeController::class, 'contact'])
   ->name('home.contact');
 
-Route::get('/single', AboutController::class);
+// Route::get('/single', AboutController::class);
 
 //------
 // POSTS
 // ----
 
-$posts = [
-  1 => [
-    'title' => 'Intro to Laravel',
-    'content' => 'This is a short intro to Laravel',
-    'is_new' => true,
-    'has_comments' => true,
-  ],
-  2 => [
-    'title' => 'Intro to PHP',
-    'content' => 'This is a short intro to PHP',
-    'is_new' => false,
-  ],
-  3 => [
-    'title' => 'Intro to Golang',
-    'content' => 'This is a short intro to Golang',
-    'is_new' => false,
-  ],
-];
+// $posts = [
+//   1 => [
+//     'title' => 'Intro to Laravel',
+//     'content' => 'This is a short intro to Laravel',
+//     'is_new' => true,
+//     'has_comments' => true,
+//   ],
+//   2 => [
+//     'title' => 'Intro to PHP',
+//     'content' => 'This is a short intro to PHP',
+//     'is_new' => false,
+//   ],
+//   3 => [
+//     'title' => 'Intro to Golang',
+//     'content' => 'This is a short intro to Golang',
+//     'is_new' => false,
+//   ],
+// ];
 
 Route::resource('/posts', PostsController::class);
 // ->only(['index', 'show', 'create', 'store', 'edit', 'update']);
+
+
+// -----
+// AUTH
+//------
+
+Auth::routes();
+
 
 // Route::get('/posts', function () use ($posts) {
 //   return view('posts.index', ['posts' => $posts]);
@@ -82,34 +92,30 @@ Route::resource('/posts', PostsController::class);
 // OTHER
 //------
 
-Route::get('/fun/responses', function () use ($posts) {
-  return response($posts, 201)->header('Content-Type', 'application/json')->cookie("CIASTO!!", "Igor Jot Jot", 3600);
-});
+// Route::get('/fun/responses', function () use ($posts) {
+//   return response($posts, 201)->header('Content-Type', 'application/json')->cookie("CIASTO!!", "Igor Jot Jot", 3600);
+// });
 
-Route::get('/fun/redirect', function () {
-  return redirect('/contact');
-});
+// Route::get('/fun/redirect', function () {
+//   return redirect('/contact');
+// });
 
-Route::get('/fun/back', function () {
-  return back();
-});
+// Route::get('/fun/back', function () {
+//   return back();
+// });
 
-Route::get('/fun/named-route', function () {
-  return redirect()->route('posts.show', ['id' => 1]);
-});
+// Route::get('/fun/named-route', function () {
+//   return redirect()->route('posts.show', ['id' => 1]);
+// });
 
-Route::get('/fun/away', function () {
-  return redirect()->away('https://youtube.com');
-});
+// Route::get('/fun/away', function () {
+//   return redirect()->away('https://youtube.com');
+// });
 
-Route::get('/fun/json', function () use ($posts) {
-  return response()->json($posts);
-});
+// Route::get('/fun/json', function () use ($posts) {
+//   return response()->json($posts);
+// });
 
-Route::get('/fun/download', function () use ($posts) {
-  return response()->download(public_path('backend.png'));
-});
-
-// -----
-
-//------
+// Route::get('/fun/download', function () use ($posts) {
+//   return response()->download(public_path('backend.png'));
+// });

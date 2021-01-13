@@ -16,9 +16,12 @@ class CreateBlogPostsTable extends Migration
         Schema::create('blog_posts', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->softDeletes();
 
-            $table->string('title')->default('');
-            $table->text('content')->default('');
+            // $table->string('title')->default('');
+            // $table->text('content')->default('');
+            $table->string('title');
+            $table->text('content');
         });
     }
 
