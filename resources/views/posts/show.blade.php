@@ -2,8 +2,51 @@
 
 @section('content')
     <h1>
-      {{ $post->title }}
+        {{ $post->title }}
+        @badge(['show' => now()->diffInMinutes($post->created_at) < 30])
+            Brand new Post!
+        @endbadge
     </h1>
+
+    <p>{{ $post->content }}</p>
+
+    @updated(['date' => $post->created_at, 'name' => $post->user->name])
+    @endupdated
+    @updated(['date' => $post->updated_at])
+        Updated
+    @endupdated
+
+    <p>Currently read by {{ $counter }} people</p>
+
+    <h4>Comments</h4>
+
+    @forelse($post->comments as $comment)
+        <p>
+            {{ $comment->content }}
+        </p>
+        @updated(['date' => $comment->created_at])
+        @endupdated
+    @empty
+        <p>No comments yet!</p>
+    @endforelse
+@endsection
+
+
+
+
+{{-- @extends('layouts.app')
+
+@section('content')
+    <h1>
+      {{ $post->title }}
+
+      @badge(['type' => 'primary', 'show' => now()->diffInMinutes($post->created_at) < 20])
+        brand new post
+      @endbadge --}}
+      {{-- @component('components.badge', ['type' => 'primary'])
+        brand new post
+      @endcomponent --}}
+    {{-- </h1>
 
     <p>
       {{ $post->content }}
@@ -12,12 +55,6 @@
     <p>
       Added {{ $post->created_at->diffForHumans() }}
     </p>
-
-    @if ((new Carbon\Carbon())->diffInMinutes($post->created_at) < 5 )
-        <strong>
-          New!
-        </strong>
-    @endif
 
     <h4>
       Comments
@@ -34,7 +71,10 @@
     @empty
         <p>No comments yet!</p>
     @endforelse
-@endsection
+@endsection --}}
+
+
+
 
 
 {{--  @extends('layouts.app')

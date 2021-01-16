@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\PostsController;
-
+use App\Http\Controllers\PostTagController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -42,6 +42,11 @@ Route::get('/', [HomeController::class, 'home'])
 Route::get('/contact', [HomeController::class, 'contact'])
   ->name('home.contact');
 
+Route::get('/secret', [HomeController::class, 'secret'])
+  ->name('home.secret')
+  ->middleware('can:home.secret');
+// ->middleware('can:home.secret,post');
+
 // Route::get('/single', AboutController::class);
 
 //------
@@ -69,6 +74,8 @@ Route::get('/contact', [HomeController::class, 'contact'])
 
 Route::resource('/posts', PostsController::class);
 // ->only(['index', 'show', 'create', 'store', 'edit', 'update']);
+
+Route::get('/posts/tag/{id}', [PostTagController::class, 'index'])->name('posts.tags.index');
 
 
 // -----

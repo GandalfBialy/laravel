@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Http\ViewComposers\ActivityComposer;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Blade::aliasComponent('components.badge', 'badge');
+        Blade::aliasComponent('components.card', 'card');
+        Blade::aliasComponent('components.updated', 'updated');
+
+        // view()->composer(['*'], ActivityComposer::class);
+        view()->composer(['posts.index', 'posts.show'], ActivityComposer::class);
     }
 }

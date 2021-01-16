@@ -19,14 +19,13 @@ class BlogPostSeeder extends Seeder
         $blogCount = (int)$this->command->ask('How many blog posts?', 50);
         $users = \App\Models\User::all();
         // $users = User::all();
-        
+
         // factory(App\BlogPost::class, $blogCount)->make()->each(function($post) use ($users) {
         //     $post->user_id = $users->random()->id;
         //     $post->save();
         // });
-        BlogPost::factory()->count($blogCount)->make()->each(function($post) use ($users) {
+        BlogPost::factory()->count($blogCount)->make()->each(function ($post) use ($users) {
             $post->user_id = $users->random()->id;
-            // $post->user_id = 1;
             $post->save();
         });
     }

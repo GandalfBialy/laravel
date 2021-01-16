@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Comment;
+use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CommentFactory extends Factory
@@ -23,6 +24,14 @@ class CommentFactory extends Factory
     {
         return [
             'content' => $this->faker->text,
+            'created_at' => $this->faker->dateTimeBetween('-3 months'),
         ];
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // static::addGlobalScope(new LatestScope);
     }
 }
