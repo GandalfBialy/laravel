@@ -58,7 +58,7 @@ class PostsController extends Controller
         //         return $query->latest();
         //     }])->findOrFail($id),
         // ]);
-        $blogPost = Cache::tags(['blog-post'])->remember("blog-post-{$id}", 60, function () use ($id) {
+        $blogPost = Cache::remember("blog-post-{$id}", 60, function () use ($id) {
             return BlogPost::with('comments', 'tags', 'user', 'comments.user')
                 ->findOrFail($id);
         });
@@ -67,7 +67,7 @@ class PostsController extends Controller
         $counterKey = "blog-post-{$id}-counter";
         $usersKey = "blog-post-{$id}-users";
 
-        $users = Cache::tags(['blog-post'])->get($usersKey, []);
+        $users = Cache::get($usersKey, []);
         $usersUpdate = [];
         $diffrence = 0;
         $now = now();
@@ -88,15 +88,15 @@ class PostsController extends Controller
         }
 
         $usersUpdate[$sessionId] = $now;
-        Cache::tags(['blog-post'])->forever($usersKey, $usersUpdate);
+        Cache::forever($usersKey, $usersUpdate);
 
-        if (!Cache::tags(['blog-post'])->has($counterKey)) {
-            Cache::tags(['blog-post'])->forever($counterKey, 1);
+        if (!Cache::has($counterKey)) {
+            Cache::forever($counterKey, 1);
         } else {
-            Cache::tags(['blog-post'])->increment($counterKey, $diffrence);
+            Cache::increment($counterKey, $diffrence);
         }
 
-        $counter = Cache::tags(['blog-post'])->get($counterKey);
+        $counter = Cache::get($counterKey);
 
         return view('posts.show', [
             'post' => $blogPost,

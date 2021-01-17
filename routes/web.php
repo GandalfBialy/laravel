@@ -21,6 +21,26 @@ use Illuminate\Support\Facades\Auth;
 |
  */
 
+// Route::get('/', [HomeController::class, 'home']);
+//   ->name('home')
+//   // ->middleware('auth')
+//   ;
+// Route::get('/contact', 'HomeController@contact')->name('contact');
+// Route::get('/secret', 'HomeController@secret')
+//   ->name('secret')
+//   ->middleware('can:home.secret');
+// Route::resource('posts', 'PostController');
+// Route::get('/posts/tag/{tag}', 'PostTagController@index')->name('posts.tags.index');
+
+// Route::resource('posts.comments', 'PostCommentController')->only(['store']);
+
+// Auth::routes();
+
+
+
+
+
+
 //------
 // HOME
 //------
@@ -76,9 +96,9 @@ Route::get('/secret', [HomeController::class, 'secret'])
 Route::resource('/posts', PostsController::class);
 // ->only(['index', 'show', 'create', 'store', 'edit', 'update']);
 
-Route::get('/posts/tag/{id}', [PostTagController::class, 'index'])->name('posts.tags.index');
+Route::get('/posts/tag/{tag}', [PostTagController::class, 'index'])->name('posts.tags.index');
 
-// Route::resource('/post.comments', [PostCommentController::class])->only(['store']);
+Route::resource('/posts.comments', PostCommentController::class)->only(['store']);
 
 
 // -----

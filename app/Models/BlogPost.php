@@ -23,6 +23,11 @@ class BlogPost extends Model
         return $this->hasMany(Comment::class)->latest();
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
@@ -46,7 +51,8 @@ class BlogPost extends Model
         return $query
             ->latest()
             ->withCount('comments')
-            ->with('user', 'tags');
+            ->with('user')
+            ->with('tags');
     }
 
 
@@ -69,10 +75,5 @@ class BlogPost extends Model
         static::restoring(function (BlogPost $blogPost) {
             $blogPost->comments()->restore();
         });
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
     }
 }
