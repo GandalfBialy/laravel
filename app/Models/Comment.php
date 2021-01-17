@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 
 class Comment extends Model
 {
@@ -31,5 +32,9 @@ class Comment extends Model
     public static function boot()
     {
         parent::boot();
+
+        static::creating(function (Comment $comment) {
+            Cache::forget("blog-post-{$comment->blog_post_id}");
+        });
     }
 }
