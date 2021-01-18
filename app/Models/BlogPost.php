@@ -10,12 +10,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
 
 use App\Scopes\DeletedAdminScope;
+use App\Traits\Taggable;
+
 // use App\Scopes\LatestScope;
 
 class BlogPost extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use Taggable;
 
     protected $fillable = ['title', 'content', 'user_id'];
 
@@ -27,11 +30,6 @@ class BlogPost extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class);
     }
 
     public function image()

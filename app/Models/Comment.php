@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Taggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,8 +12,10 @@ use Illuminate\Support\Facades\Cache;
 
 class Comment extends Model
 {
+    // use HasFactory, SoftDeletes, Taggable;
     use HasFactory;
     use SoftDeletes;
+    use Taggable;
 
     protected $fillable = [
         'content',
