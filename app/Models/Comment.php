@@ -14,9 +14,14 @@ class Comment extends Model
     use HasFactory;
     use SoftDeletes;
 
-    public function blogPost()
+    protected $fillable = [
+        'content',
+        'user_id',
+    ];
+
+    public function commentable()
     {
-        return $this->belongsTo(BlogPost::class);
+        return $this->morphTo();
     }
 
     public function user()
@@ -34,7 +39,10 @@ class Comment extends Model
         parent::boot();
 
         static::creating(function (Comment $comment) {
-            Cache::forget("blog-post-{$comment->blog_post_id}");
+            if ($comment->commentable_type === BlogPost::class) {
+                Cache::forget("blog-post-{$comment->commentable_id}");
+                Cache::forget("mostCommented");
+            }
         });
     }
 }

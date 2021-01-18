@@ -8,8 +8,11 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
 use App\Models\BlogPost;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
+
 // use Illuminate\Support\Facades\Redis as Cache;
 // use Illuminate\Support\Facades\Redis;
 
@@ -115,6 +118,15 @@ class PostsController extends Controller
         $validatedData = $request->validated();
         $validatedData['user_id'] = $request->user()->id;
         $blogPost = BlogPost::create($validatedData);
+
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails');
+
+            $blogPost->image()->save(
+                Image::make(['path' => $path])
+            );
+        }
+
         $request->session()->flash('status', 'Blog post was created!');
 
         return redirect()->route('posts.show', ['post' => $blogPost->id]);
@@ -138,8 +150,22 @@ class PostsController extends Controller
         $this->authorize($post);
 
         $validatedData = $request->validated();
-
         $post->fill($validatedData);
+
+        if ($request->hasFile('thumbnail')) {
+            $path = $request->file('thumbnail')->store('thumbnails');
+
+            if ($post->image) {
+                Storage::delete($post->image->path);
+                $post->image->path = $path;
+                $post->image->save();
+            } else {
+                $post->image()->save(
+                    Image::make(['path' => $path])
+                );
+            }
+        }
+
         $post->save();
         $request->session()->flash('status', 'Blog post was updated!');
 

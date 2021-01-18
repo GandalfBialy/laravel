@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreComment;
 use App\Models\BlogPost;
-use Illuminate\Http\Request;
 
 class PostCommentController extends Controller
 {
@@ -38,8 +37,8 @@ class PostCommentController extends Controller
             'user_id' => $request->user()->id
         ]);
 
-        $request->session()->flash('status', 'Comment was created!');
+        // $request->session()->flash('status', 'Comment has been created!');
 
-        return redirect()->back();
+        return redirect()->back()->withStatus('Comment has been created!');
     }
 }

@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use App\Scopes\DeletedAdminScope;
-use App\Scopes\LatestScope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Cache;
+
+use App\Scopes\DeletedAdminScope;
+// use App\Scopes\LatestScope;
 
 class BlogPost extends Model
 {
@@ -20,7 +21,7 @@ class BlogPost extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class)->latest();
+        return $this->morphMany(Comment::class, 'commentable')->latest();
     }
 
     public function user()
@@ -31,6 +32,11 @@ class BlogPost extends Model
     public function tags()
     {
         return $this->belongsToMany(Tag::class);
+    }
+
+    public function image()
+    {
+        return $this->morphOne(Image::class, 'imageable');
     }
 
     public function scopeLatest(Builder $query)
@@ -65,6 +71,7 @@ class BlogPost extends Model
 
         static::deleting(function (BlogPost $blogPost) {
             $blogPost->comments()->delete();
+            $blogPost->image()->delete();
             Cache::forget("blog-post-{$blogPost->id}");
         });
 

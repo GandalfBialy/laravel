@@ -3,14 +3,29 @@
 @section('content')
 <div class="row">
     <div class="col-8">
-        <h1>
+      @if($post->image)
+        <div style="background-image: url('{{ $post->image->url() }}'); min-height: 500px; color: white; text-align: center; background-attachment: fixed;">
+            <h1 style="padding-top: 100px; text-shadow: 1px 2px #000">
+        @else
+            <h1>
+        @endif
             {{ $post->title }}
             @badge(['show' => now()->diffInMinutes($post->created_at) < 30])
                 Brand new Post!
             @endbadge
-        </h1>
+        @if($post->image)    
+            </h1>
+        </div>
+        @else
+            </h1>
+        @endif
+        {{--  <img src="{{ $post->image->url() }}" alt="">  --}}
+        {{--  <h1 style="color: red;">HALO!!!</h1>  --}}
 
         <p>{{ $post->content }}</p>
+
+        {{--  <img src="{{ Storage::url($post->image->path) }}"  --}}
+        {{--  <img src="{{ $post->image->url() }}"  --}}
 
         @updated(['date' => $post->created_at, 'name' => $post->user->name])
         @endupdated
@@ -24,7 +39,7 @@
 
         <h4>Comments</h4>
 
-        @include('comments._form')
+        {{--  @include('comments._form')
 
         @forelse($post->comments as $comment)
             <p>
@@ -34,7 +49,13 @@
             @endupdated
         @empty
             <p>No comments yet!</p>
-        @endforelse
+        @endforelse  --}}
+
+        @commentForm(['route' => route('posts.comments.store', ['post' => $post->id])])
+        @endcommentForm
+
+        @commentList(['comments' => $post->comments])
+        @endcommentList
     </div>
     <div class="col-4">
         @include('posts.partials.activity')
