@@ -67,18 +67,18 @@ class BlogPost extends Model
 
         parent::boot();
 
-        static::deleting(function (BlogPost $blogPost) {
-            $blogPost->comments()->delete();
-            $blogPost->image()->delete();
-            Cache::forget("blog-post-{$blogPost->id}");
-        });
+        // static::deleting(function (BlogPost $blogPost) {
+        //     $blogPost->comments()->delete();
+        //     // $blogPost->image()->delete();
+        //     Cache::forget("blog-post-{$blogPost->id}");
+        // });
 
-        static::updating(function (BlogPost $blogPost) {
-            Cache::forget("blog-post-{$blogPost->id}");
-        });
+        // static::updating(function (BlogPost $blogPost) {
+        //     Cache::forget("blog-post-{$blogPost->id}");
+        // });
 
-        static::restoring(function (BlogPost $blogPost) {
-            $blogPost->comments()->restore();
-        });
+        // static::restoring(function (BlogPost $blogPost) {
+        //     $blogPost->comments()->restore();
+        // });
     }
 }
