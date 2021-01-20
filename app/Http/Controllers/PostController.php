@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+// use App\Contracts\CounterContract;
 use App\Events\BlogPostPosted;
+use App\Facades\CounterFacade;
 use App\Http\Requests\StorePost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +13,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Models\BlogPost;
 use App\Models\Image;
 use App\Models\User;
+// use App\Services\Counter;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
@@ -25,12 +28,18 @@ use Illuminate\Support\Facades\Storage;
 //     'update' => 'update',
 //     'destroy' => 'delete',
 // ]
-class PostsController extends Controller
+class PostController extends Controller
 {
+    // private $counter;
+
+    // public function __construct(Counter $counter)
+    // public function __construct(CounterContract $counter)
     public function __construct()
     {
         $this->middleware('auth')
             ->only(['create', 'store', 'edit', 'update', 'destroy']);
+
+        // $this->counter = $counter;
     }
 
     /**
@@ -67,44 +76,47 @@ class PostsController extends Controller
                 ->findOrFail($id);
         });
 
-        $sessionId = session()->getId();
-        $counterKey = "blog-post-{$id}-counter";
-        $usersKey = "blog-post-{$id}-users";
+        // $sessionId = session()->getId();
+        // $counterKey = "blog-post-{$id}-counter";
+        // $usersKey = "blog-post-{$id}-users";
 
-        $users = Cache::get($usersKey, []);
-        $usersUpdate = [];
-        $diffrence = 0;
-        $now = now();
+        // $users = Cache::get($usersKey, []);
+        // $usersUpdate = [];
+        // $diffrence = 0;
+        // $now = now();
 
-        foreach ($users as $session => $lastVisit) {
-            if ($now->diffInMinutes($lastVisit) >= 1) {
-                $diffrence--;
-            } else {
-                $usersUpdate[$session] = $lastVisit;
-            }
-        }
+        // foreach ($users as $session => $lastVisit) {
+        //     if ($now->diffInMinutes($lastVisit) >= 1) {
+        //         $diffrence--;
+        //     } else {
+        //         $usersUpdate[$session] = $lastVisit;
+        //     }
+        // }
 
-        if (
-            !array_key_exists($sessionId, $users)
-            || $now->diffInMinutes($users[$sessionId]) >= 1
-        ) {
-            $diffrence++;
-        }
+        // if (
+        //     !array_key_exists($sessionId, $users)
+        //     || $now->diffInMinutes($users[$sessionId]) >= 1
+        // ) {
+        //     $diffrence++;
+        // }
 
-        $usersUpdate[$sessionId] = $now;
-        Cache::forever($usersKey, $usersUpdate);
+        // $usersUpdate[$sessionId] = $now;
+        // Cache::forever($usersKey, $usersUpdate);
 
-        if (!Cache::has($counterKey)) {
-            Cache::forever($counterKey, 1);
-        } else {
-            Cache::increment($counterKey, $diffrence);
-        }
+        // if (!Cache::has($counterKey)) {
+        //     Cache::forever($counterKey, 1);
+        // } else {
+        //     Cache::increment($counterKey, $diffrence);
+        // }
 
-        $counter = Cache::get($counterKey);
+        // $counter = Cache::get($counterKey);
+
+        // $counter = resolve(Counter::class);
 
         return view('posts.show', [
             'post' => $blogPost,
-            'counter' => $counter,
+            // 'counter' => $this->counter->increment("blog-post-{$id}", ['blog-post']),
+            'counter' => CounterFacade::increment("blog-post-{$id}", ['blog-post']),
         ]);
     }
 

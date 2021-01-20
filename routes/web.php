@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\PostCommentController;
-use App\Http\Controllers\PostsController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostTagController;
 use App\Http\Controllers\UserCommentController;
 use App\Http\Controllers\UserController;
@@ -97,7 +97,7 @@ Route::get('/secret', [HomeController::class, 'secret'])
 //   ],
 // ];
 
-Route::resource('/posts', PostsController::class);
+Route::resource('/posts', PostController::class);
 // ->only(['index', 'show', 'create', 'store', 'edit', 'update']);
 
 Route::get('/posts/tag/{tag}', [PostTagController::class, 'index'])->name('posts.tags.index');
