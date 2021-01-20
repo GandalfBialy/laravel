@@ -1,16 +1,20 @@
 @extends('layouts.app')
+
 @section('content')
+
   <form method="POST" action="{{ route('login') }}">
     @csrf
 
     <div class="form-group">
       <label>E-mail</label>
       <input name="email" value="{{ old('email') }}" required 
-        class="form-control{{ $errors->has('email') ? ' is-invalid': '' }}">
+        class="form-control {{ $errors->has('email') ? ' is-invalid': '' }}">
 
       @if ($errors->has('email'))
         <span class="invalid-feedback">
-          <strong>{{ $errors->first('email') }}</strong>
+          <strong>
+          {{ $errors->first('email') }}
+          </strong>
         </span> 
       @endif
     </div>
@@ -22,7 +26,9 @@
 
       @if ($errors->has('password'))
         <span class="invalid-feedback">
-          <strong>{{ $errors->first('password') }}</strong>
+          <strong>
+          {{ $errors->first('password') }}
+          </strong>
         </span> 
       @endif
     </div>
@@ -38,6 +44,9 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary btn-block">Login!</button>
+    <button type="submit" class="btn btn-primary btn-block">
+    Login!
+    </button>
   </form>
+
 @endsection

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
   <form method="POST" action="{{ route('register') }}">
     @csrf
@@ -10,7 +11,9 @@
 
       @if ($errors->has('name'))
         <span class="invalid-feedback">
-          <strong>{{ $errors->first('name') }}</strong>
+          <strong>
+          {{ $errors->first('name') }}
+          </strong>
         </span>
       @endif
     </div>
@@ -22,7 +25,9 @@
 
       @if ($errors->has('email'))
         <span class="invalid-feedback">
-          <strong>{{ $errors->first('email') }}</strong>
+          <strong>
+          {{ $errors->first('email') }}
+          </strong>
         </span> 
       @endif
     </div>
@@ -34,7 +39,9 @@
 
       @if ($errors->has('password'))
         <span class="invalid-feedback">
-          <strong>{{ $errors->first('password') }}</strong>
+          <strong>
+          {{ $errors->first('password') }}
+          </strong>
         </span> 
       @endif
     </div>
@@ -44,6 +51,8 @@
       <input name="password_confirmation" required class="form-control" type="password">
     </div>
 
-    <button type="submit" class="btn btn-primary btn-block">Register!</button>
+    <button type="submit" class="btn btn-primary btn-block">
+    Register!
+    </button>
   </form>
 @endsection
