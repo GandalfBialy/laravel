@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Jobs\NotifyUsersPostWasCommented;
 use App\Jobs\ThrottledMail;
 
+use App\Http\Resources\Comment as CommentResource;
+
 class PostCommentController extends Controller
 {
     // public function __construct()
@@ -33,6 +35,15 @@ class PostCommentController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->only(['store']);
+    }
+
+    public function index(BlogPost $post)
+    {
+        // return $post->comments;
+        // return new CommentResource($post->comments->first());
+        // return CommentResource::collection($post->comments);
+        return CommentResource::collection($post->comments()->with('user')->get());
+        // return $post->comments()->with('user')->get();
     }
 
     public function store(BlogPost $post, StoreComment $request)
